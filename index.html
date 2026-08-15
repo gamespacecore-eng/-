@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тест: Нормативно-правовое регулирование ЯВД г. Москвы</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; line-height: 1.6; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { color: #1f3c4d; text-align: center; font-size: 24px; margin-bottom: 10px; border-bottom: 2px solid #2ecc71; padding-bottom: 15px; }
-        .description { text-align: center; color: #666; margin-bottom: 30px; font-size: 15px; }
-        .question-block { background: #fafafa; border-left: 4px solid #34495e; padding: 15px 20px; margin-bottom: 25px; border-radius: 0 6px 6px 0; }
-        .question-title { font-weight: 600; font-size: 16px; margin-bottom: 12px; color: #2c3e50; }
-        .options label { display: block; position: relative; padding: 10px 10px 10px 35px; margin-bottom: 6px; background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; color: #333; margin: 0; padding: 15px; }
+        .container { max-width: 750px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h1 { color: #1f3c4d; text-align: center; font-size: 22px; border-bottom: 2px solid #2ecc71; padding-bottom: 10px; margin-top: 0; }
+        .description { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
+        .q-block { background: #fafafa; border-left: 4px solid #34495e; padding: 12px 15px; margin-bottom: 20px; border-radius: 0 6px 6px 0; }
+        .q-title { font-weight: 600; font-size: 15px; margin-bottom: 10px; color: #2c3e50; }
+        .options label { display: block; position: relative; padding: 8px 10px 8px 35px; margin-bottom: 5px; background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; cursor: pointer; font-size: 13px; }
         .options label:hover { background: #f1f8ff; }
-        .options input[type="radio"] { position: absolute; left: 12px; top: 14px; margin: 0; }
-        .btn-submit { display: block; width: 100%; background: #2ecc71; color: #fff; border: none; padding: 15px; font-size: 18px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 30px; }
+        .options input { position: absolute; left: 12px; top: 11px; margin: 0; }
+        .btn-submit { display: block; width: 100%; background: #2ecc71; color: #fff; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 25px; }
         .btn-submit:hover { background: #27ae60; }
-        #result-box { display: none; margin-top: 30px; padding: 20px; background: #ebf5fb; border-radius: 6px; border: 1px solid #aec6cf; text-align: center; }
-        #result-text { font-size: 20px; font-weight: bold; color: #2c3e50; }
+        #res-box { display: none; margin-top: 25px; padding: 15px; background: #ebf5fb; border-radius: 6px; border: 1px solid #aec6cf; text-align: center; font-size: 18px; font-weight: bold; color: #2c3e50; }
         .correct-answer { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; }
         .wrong-answer { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
     </style>
@@ -25,112 +24,45 @@
 <body>
 <div class="container">
     <h1>Проверочный тест для администраторов ЯВД</h1>
-    <div class="description">Контроль знаний правовой и нормативной базы города Москвы</div>
+    <div class="description">Полная база: 30 вопросов по нормативным документам города Москвы</div>
     <form id="quiz-form">
-        <!-- Блок статических вопросов -->
-        <div class="question-block">
-            <div class="question-title">1. Какой нормативный документ определяет общие принципы государственного регулирования торговой деятельности в Российской Федерации?</div>
-            <div class="options">
-                <label><input type="radio" name="q0" value="0"> Постановление Правительства Москвы № 172-ПП</label>
-                <label id="correct-0"><input type="radio" name="q0" value="1"> Федеральный закон от 28.12.2009 № 381-ФЗ</label>
-                <label><input type="radio" name="q0" value="2"> Распоряжение ДТиУ города Москвы № 229</label>
-            </div>
-        </div>
+        <div id="questions-area"></div>
+        <button type="button" class="btn-submit" onclick="checkQuiz()">Проверить результаты</button>
+    </form>
+    <div id="res-box"></div>
+</div>
+<script>
+const qData = [
+    {q:"Какой нормативный документ определяет общие принципы государственного регулирования торговой деятельности в РФ?", a:["Постановление Правительства Москвы № 172-ПП","Федеральный закон от 28.12.2009 № 381-ФЗ","Распоряжение ДТиУ города Москвы № 229"], c:1},
+    {q:"Какое Постановление Правительства Москвы утверждает порядок организации ярмарок и продажи товаров на них?", a:["№ 172-ПП от 04.05.2011","№ 372-ПП от 03.07.2014","№ 720 от 10.12.2025"], c:0},
+    {q:"На основании какого документа утвержден Административный регламент предоставления госуслуги по предоставлению мест?", a:["Распоряжение ДТиУ № 535","Постановление Правительства Москвы № 372-ПП от 03.07.2014","Приказ ГБУ «Московские ярмарки» № 89"], c:1},
+    {q:"Какой документ утверждает стандарты проведения ярмарок на территории города Москвы (требования к покрытию, санитарии)?", a:["Распоряжение ДТиУ города Москвы от 29.06.2018 № 229","Федеральный закон № 381-ФЗ","Приказ ГБУ «Московские ярмарки» № 762"], c:0},
+    {q:"В каком документе содержатся формы документов (акт о нарушениях, выписка из Реестра) и ассортиментный перечень?", a:["Постановление № 172-ПП","Распоряжение ДТиУ города Москвы от 08.12.2015 № 535","Приказ ГБУ «Московские ярмарки» № 720"], c:1},
+    {q:"Какой приказ ГБУ «Московские ярмарки» регламентирует предоставление мест для продажи товаров пенсионерам/инвалидам?", a:["Приказ от 10.12.2025 № 720","Приказ от 17.02.2026 № 89","Приказ от 22.04.2026 № 232"], c:1},
+    {q:"Какой документ определяет перечень ярмарок, на площадке которых требуется обязательное присутствие двух администраторов?", a:["Приказ ГБУ «Московские ярмарки» от 26.12.2025 № 762","Распоряжение ДТиУ № 229","Постановление № 372-ПП"], c:0},
+    {q:"Согласно Распоряжению ДТиУ № 229, какая информация/оборудование НЕ входит в обязанности по обустройству площадки?", a:["Обязательный информационный стенд","Установка капитальных торговых объектов","Обеспечение биотуалетов и контейнеров для ТКО"], c:1},
+    {q:"В соответствии с Распоряжением ДТиУ № 535, к какой группе ассортимента относятся «Сезонные фрукты, ягоды, грибы»?", a:["Минимальный ассортимент","Дополнительная группа (по специализации)","Данная позиция запрещена для продажи"], c:1},
+    {q:"Согласно Распоряжению ДТиУ № 535, какая из следующих позиций входит в МИНИМАЛЬНЫЙ ассортимент группы «Мясо-молочная продукция»?", a:["Пряности (сухие концентраты, приправы)","Продукты молокосодержащие, спреды","Мясо и мясные продукты промышленного производства"], c:2},
+    {q:"Каким документом торговый перечень был дозагружен позицией «Детское питание» в группы «Мясо-молочная продукция» и «Хлеб»?", a:["Распоряжением ДТиУ от 10.08.2026 № 149","Приказом ГБУ «Московские ярмарки» № 232","Постановлением Правительства Москвы № 172-ПП"], c:0},
+    {q:"Какой документ обязывает администратора находиться на площадке всё время работы и носить бейдж с ФИО и фото?", a:["Постановление Правительства Москвы № 372-ПП","Распоряжение ДТиУ № 229 (Раздел V Стандарта)","Федеральный закон № 381-ФЗ"], c:1},
+    {q:"Что из перечисленного, согласно Пункту 2.10 Постановления № 372-ПП, является законным основанием для отказа в месте на ярмарке?", a:["Некорректное заполнение, отсутствие мест или повторная заявка","Отсутствие у заявителя личного грузового автотранспорта","Подача заявления менее чем за 30 дней до сессии"], c:0},
+    {q:"На какой минимальный срок должен быть заключен договор аренды земли для проверки документов пенсионера по Приказу № 89?", a:["Без ограничений по сроку","Сроком не менее 6 месяцев","Сроком более или равным 1 году (≥ 1 года)"], c:2},
+    {q:"Что происходит со льготным участником (пенсионером/инвалидом) при выявлении нарушений в соответствии с Приказом № 89?", a:["Выносится устное предупреждение","Составляется акт, и нарушитель лишается возможности занимать соцместа во всем городе","Налагается штраф на месте"], c:1},
+    {q:"На какую статью Федерального закона № 381-ФЗ ссылается Постановление № 172-ПП при описании порядка организации ярмарок?", a:["Статья 5","Статья 11","Статья 22"], c:1},
+    {q:"Какой орган исполнительной власти города Москвы осуществляет мониторинг ярмарок согласно Разделу X Постановления № 172-ПП?", a:["Департамент торговли и услуг города Москвы","Префектура административного округа","Управа района"], c:0},
+    {q:"Какая организация является официальным организатором ярмарок выходного дня согласно Разделу I Постановления № 172-ПП?", a:["АО «Московские рынки»","ГБУ «Московские ярмарки»","Департамент городского имущества"], c:1},
+    {q:"Согласно Разделу IV Постановления № 172-ПП (Пункт 25.1), в какой форме предоставляются места для продажи товаров?", a:["В бумажном виде через МФЦ","В электронной форме через Портал госуслуг Москвы (mos.ru)","Через подачу заявления администратору на площадке"], c:1},
+    {q:"Какой документ устанавливает основания для составления актов (9.1–9.7) и порядок досрочного отзыва места на ярмарке?", a:["Постановление Правительства Москвы № 172-ПП (Пункт 25.10)","Приказ ГБУ «Московские ярмарки» № 762","Распоряжение ДТиУ № 229"], c:0},
+    {q:"Какой орган осуществляет мониторинг работы ярмарок на внутригородских муниципальных образованиях по Пункту 51 Постановления № 172-ПП?", a:["Государственная инспекция по недвижимости","Советы депутатов внутригородских муниципальных образований","Роспотребнадзор"], c:1},
+    {q:"Какая категория граждан имеет право подавать заявления на предоставление мест по Административному регламенту Постановления № 372-ПП?", a:["Только юридические лица","Юридические лица, ИП и граждане (включая ЛПХ и садоводов)","Исключительно граждане с ЛПХ"], c:1},
+    {q:"Какие сроки предоставления государственной услуги установлены для первой заявочной кампании (Постановление № 372-ПП, пункт 2.7)?", a:["3 рабочих дня","5 календарных дней","10 календарных дней"], c:1},
+    {q:"Что является официальным результатом предоставления госуслуги согласно Пункту 2.11 Административного регламента?", a:["Устное распоряжение администратора","Выписка из Реестра решений или решение об отказе","Заключенный бумажный договор"], c:1},
+    {q:"К какому разделу Распоряжения ДТиУ № 229 относятся закрепленные законом обязанности администратора ярмарки?", a:["Раздел I","Раздел V","Раздел VII"], c:1},
+    {q:"В соответствии с какими пунктами какого документа администратор проверяет наличие документов и ассортимент участников?", a:["В соответствии с пунктом 25.9 ППМ № 172-ПП","В соответствии с Приказом № 720","В соответствии с Федеральным законом № 381-ФЗ"], c:0},
+    {q:"Кто осуществляет оперативный контроль за исполнением требований Стандарта со стороны участника в рамках торгового дня (Распоряжение № 229)?", a:["Сотрудник полиции","Администратор площадки","Представитель торгового профсоюза"], c:1},
+    {q:"Какое оборудование НЕ упоминается в Разделе VII Постановления № 172-ПП как обязательное к местам для продажи товаров?", a:["Единое торговое оборудование и весы на виду","Холодильники с термометрами и информационная табличка","Электронный терминал безналичной оплаты для каждого продавца"], c:2},
+    {q:"Какие документы, помимо товаросопроводительных и медкнижек, обязаны иметь при себе участники согласно Разделу VIII Постановления № 172-ПП?", a:["Ветеринарные документы","Справку о несудимости","Договор страхования имущества"], c:0},
+    {q:"Какое наказание предусмотрено для администратора за невыполнение обязанностей, закрепленных в Стандарте (Распоряжение № 229)?", a:["Уголовная ответственность","Дисциплинарная ответственность","Наказание не предусмотрено нормативными актами"], c:1}
+];
 
-        <div class="question-block">
-            <div class="question-title">2. Какое Постановление Правительства Москвы утверждает порядок организации ярмарок и продажи товаров на них на территории города Москвы?</div>
-            <div class="options">
-                <label id="correct-1"><input type="radio" name="q1" value="0"> № 172-ПП от 04.05.2011</label>
-                <label><input type="radio" name="q1" value="1"> № 372-ПП от 03.07.2014</label>
-                <label><input type="radio" name="q1" value="2"> № 720 от 10.12.2025</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">3. На основании какого документа утвержден Административный регламент предоставления государственной услуги по предоставлению мест на ярмарке выходного дня?</div>
-            <div class="options">
-                <label><input type="radio" name="q2" value="0"> Распоряжение ДТиУ № 535</label>
-                <label id="correct-2"><input type="radio" name="q2" value="1"> Постановление Правительства Москвы № 372-ПП от 03.07.2014</label>
-                <label><input type="radio" name="q2" value="2"> Приказ ГБУ «Московские ярмарки» № 89</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">4. Какой документ утверждает стандарты проведения ярмарок на территории города Москвы (требования к покрытию, санитарии, охране и т.д.)?</div>
-            <div class="options">
-                <label id="correct-3"><input type="radio" name="q3" value="0"> Распоряжение ДТиУ города Москвы от 29.06.2018 № 229</label>
-                <label><input type="radio" name="q3" value="1"> Федеральный закон № 381-ФЗ</label>
-                <label><input type="radio" name="q3" value="2"> Приказ ГБУ «Московские ярмарки» № 762</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">5. В каком документе содержатся формы документов (акт о нарушениях, выписка из Реестра, решение об отказе) и утвержден ассортиментный перечень товаров?</div>
-            <div class="options">
-                <label><input type="radio" name="q4" value="0"> Постановление № 172-ПП</label>
-                <label id="correct-4"><input type="radio" name="q4" value="1"> Распоряжение ДТиУ города Москвы от 08.12.2015 № 535</label>
-                <label><input type="radio" name="q4" value="2"> Приказ ГБУ «Московские ярмарки» № 720</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">6. Какой приказ ГБУ «Московские ярмарки» регламентирует предоставление мест для продажи товаров пенсионерам и (или) инвалидам?</div>
-            <div class="options">
-                <label><input type="radio" name="q5" value="0"> Приказ от 10.12.2025 № 720</label>
-                <label id="correct-5"><input type="radio" name="q5" value="1"> Приказ от 17.02.2026 № 89</label>
-                <label><input type="radio" name="q5" value="2"> Приказ от 22.04.2026 № 232</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">7. Какой документ определяет перечень ярмарок, на площадке которых требуется обязательное присутствие двух администраторов?</div>
-            <div class="options">
-                <label id="correct-6"><input type="radio" name="q6" value="0"> Приказ ГБУ «Московские ярмарки» от 26.12.2025 № 762</label>
-                <label><input type="radio" name="q6" value="1"> Распоряжение ДТиУ № 229</label>
-                <label><input type="radio" name="q6" value="2"> Постановление № 372-ПП</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">8. Согласно Распоряжению ДТиУ № 229, какая информация/оборудование НЕ входит в обязанности по обустройству площадки?</div>
-            <div class="options">
-                <label><input type="radio" name="q7" value="0"> Обязательный информационный стенд</label>
-                <label id="correct-7"><input type="radio" name="q7" value="1"> Установка капитальных торговых объектов</label>
-                <label><input type="radio" name="q7" value="2"> Обеспечение биотуалетов и контейнеров для ТКО</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">9. В соответствии с Распоряжением ДТиУ № 535, к какой группе ассортимента относятся «Сезонные фрукты, ягоды, грибы в период произрастания»?</div>
-            <div class="options">
-                <label><input type="radio" name="q8" value="0"> Минимальный ассортимент</label>
-                <label id="correct-8"><input type="radio" name="q8" value="1"> Дополнительная группа (по специализации)</label>
-                <label><input type="radio" name="q8" value="2"> Данная позиция запрещена для продажи</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">10. Согласно Распоряжению ДТиУ № 535, какая из следующих позиций входит в МИНИМАЛЬНЫЙ ассортимент группы «Мясо-молочная продукция»?</div>
-            <div class="options">
-                <label><input type="radio" name="q9" value="0"> Пряности (сухие концентраты, приправы в промышленной упаковке)</label>
-                <label><input type="radio" name="q9" value="1"> Продукты молокосодержащие, спреды</label>
-                <label id="correct-9"><input type="radio" name="q9" value="2"> Мясо и мясные продукты промышленного производства</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">11. Каким документом торговый перечень был обновлен и дозагружен позицией «Детское питание» в группы «Мясо-молочная продукция» и «Хлеб, продукты»?</div>
-            <div class="options">
-                <label id="correct-10"><input type="radio" name="q10" value="0"> Распоряжением ДТиУ от 10.08.2026 № 149</label>
-                <label><input type="radio" name="q10" value="1"> Приказом ГБУ «Московские ярмарки» № 232</label>
-                <label><input type="radio" name="q10" value="2"> Постановлением Правительства Москвы № 172-ПП</label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <div class="question-title">12. Какой документ обязывает администратора находиться на площадке всё время работы ярмарки, носить бейдж с ФИО, фото и наименованием организатора?</div>
-            <div class="options">
-                <label><input type="radio" name="q11" value="0"> Постановление Правительства Москвы № 372-ПП</label>
-                <label id="correct-11"><input type="radio" name="q11" value="1"> Распоряжение ДТиУ № 229 (Раздел V Стандарта)</label>
-                <label><input type="radio" name="q11" value="2"> Федеральный закон № 381-ФЗ</label>
-                
+const area = document.getElementById('questions-area');qData.forEach((item, i) => {const block = document.createElement('div');block.className = 'q-block';let html = <div class="q-title">${i + 1}. ${item.q}</div><div class="options">;item.a.forEach((opt, oIdx) => {html += <label id="lbl-${i}-${oIdx}"><input type="radio" name="q${i}" value="${oIdx}"> ${opt}</label>;});html += '';block.innerHTML = html;area.appendChild(block);});function checkQuiz() {let score = 0;document.querySelectorAll('.options label').forEach(l => l.className = '');qData.forEach((item, i) => {const sel = document.querySelector(input[name="q${i}"]:checked);document.getElementById(lbl-${i}-${item.c}).className = 'correct-answer';if (sel) {const val = parseInt(sel.value);if (val === item.c) { score++; } else { document.getElementById(lbl-${i}-${val}).className = 'wrong-answer'; }}});const box = document.getElementById('res-box');box.style.display = 'block';box.innerHTML = Ваш результат: ${score} из 30 правильных ответов.;box.scrollIntoView({ behavior: 'smooth' });}
